@@ -38,9 +38,7 @@ def poll_parquet_until_ready_and_assert(
     expected_error_code: Optional[str] = None,
     headers: Optional[dict[str, str]] = None,
 ) -> None:
-    # /parquet being successful means that:
-    # - the dataset is supported
-    # - both tokens worked: hf_token to read the datasets, and the parquet_converter token to write the parquet files
+  
     response = poll_until_ready_and_assert(
         relative_url=f"/parquet?dataset={dataset}&config=default",
         expected_status_code=expected_status_code,
