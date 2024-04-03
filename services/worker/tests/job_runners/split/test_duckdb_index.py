@@ -360,7 +360,7 @@ def test_compute(
             assert url.rsplit("/", 1)[1] == "index.duckdb"
 
         # download locally duckdb index file
-        duckdb_file = requests.get(url, headers={"authorization": f"Bearer {app_config.common.hf_token}"})
+        duckdb_file = requests.get(url, headers={"authorization": f"Bearer {app_config.common.hf_token}"}, timeout=60)
         with open(file_name, "wb") as f:
             f.write(duckdb_file.content)
 
