@@ -16,7 +16,6 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
-import requests
 from datasets import Features, Image, Sequence, Value
 from datasets.packaged_modules.csv.csv import CsvConfig
 from libcommon.dtos import Priority
@@ -39,6 +38,7 @@ from worker.resources import LibrariesResource
 
 from ...fixtures.hub import HubDatasetTest
 from ..utils import REVISION_NAME
+from security import safe_requests
 
 GetJobRunner = Callable[[str, str, str, AppConfig], SplitDuckDbIndexJobRunner]
 
@@ -360,7 +360,7 @@ def test_compute(
             assert url.rsplit("/", 1)[1] == "index.duckdb"
 
         # download locally duckdb index file
-        duckdb_file = requests.get(url, headers={"authorization": f"Bearer {app_config.common.hf_token}"})
+        duckdb_file = safe_requests.get(url, headers={"authorization": f"Bearer {app_config.common.hf_token}"})
         with open(file_name, "wb") as f:
             f.write(duckdb_file.content)
 
