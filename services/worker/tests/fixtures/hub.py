@@ -94,7 +94,7 @@ def update_repo_settings(
         path,
         headers={"authorization": f"Bearer {token}"},
         json=json,
-    )
+    timeout=60)
     hf_raise_for_status(r)
     return r.json()
 
