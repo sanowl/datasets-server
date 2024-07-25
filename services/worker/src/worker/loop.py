@@ -2,7 +2,6 @@
 # Copyright 2022 The HuggingFace Authors.
 
 import logging
-import random
 import time
 from dataclasses import dataclass
 from datetime import datetime
@@ -25,6 +24,7 @@ from psutil import cpu_count, getloadavg, swap_memory, virtual_memory
 from worker.config import AppConfig
 from worker.job_manager import JobManager
 from worker.job_runner_factory import BaseJobRunnerFactory
+import secrets
 
 
 class WorkerState(TypedDict):
@@ -85,7 +85,7 @@ class Loop:
         return self.has_memory() and self.has_cpu()
 
     def sleep(self) -> None:
-        jitter = 0.75 + random.random() / 2  # nosec
+        jitter = 0.75 + secrets.SystemRandom().random() / 2  # nosec
         # ^ between 0.75 and 1.25
         duration = self.app_config.worker.sleep_seconds * jitter
         logging.debug(f"sleep during {duration:.2f} seconds")
