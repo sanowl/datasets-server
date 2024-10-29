@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2023 The HuggingFace Authors.
 
-import random
 from collections.abc import Callable
 from pathlib import Path
 from typing import Optional
@@ -16,6 +15,7 @@ from worker.job_runners._job_runner_with_cache import JobRunnerWithCache
 from worker.resources import LibrariesResource
 
 from ..fixtures.hub import get_default_config_split
+import secrets
 
 
 class DummyJobRunner(JobRunnerWithCache):
@@ -89,7 +89,7 @@ def test_get_cache_subdirectory(
     expected: str,
 ) -> None:
     job_runner = get_job_runner(dataset, config, split, app_config)
-    random.seed(0)
+    secrets.SystemRandom().seed(0)
     assert job_runner.get_cache_subdirectory() == expected
 
 
