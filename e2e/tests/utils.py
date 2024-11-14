@@ -16,6 +16,7 @@ from huggingface_hub.utils._errors import hf_raise_for_status
 from requests import Response
 
 from .constants import CI_HUB_ENDPOINT
+from security import safe_requests
 
 PORT_REVERSE_PROXY = os.environ.get("PORT_REVERSE_PROXY", "8000")
 API_UVICORN_PORT = os.environ.get("API_UVICORN_PORT", "8080")
@@ -37,7 +38,7 @@ Headers = Mapping[str, str]
 
 
 def get(relative_url: str, headers: Optional[Headers] = None, url: str = URL) -> Response:
-    return requests.get(f"{url}{relative_url}", headers=headers)
+    return safe_requests.get(f"{url}{relative_url}", headers=headers)
 
 
 def post(relative_url: str, json: Optional[Any] = None, headers: Optional[Headers] = None, url: str = URL) -> Response:
