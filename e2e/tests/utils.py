@@ -37,11 +37,11 @@ Headers = Mapping[str, str]
 
 
 def get(relative_url: str, headers: Optional[Headers] = None, url: str = URL) -> Response:
-    return requests.get(f"{url}{relative_url}", headers=headers)
+    return requests.get(f"{url}{relative_url}", headers=headers, timeout=60)
 
 
 def post(relative_url: str, json: Optional[Any] = None, headers: Optional[Headers] = None, url: str = URL) -> Response:
-    return requests.post(f"{url}{relative_url}", json=json, headers=headers)
+    return requests.post(f"{url}{relative_url}", json=json, headers=headers, timeout=60)
 
 
 def poll(
@@ -216,7 +216,7 @@ def tmp_dataset(
             path,
             headers=hf_api._build_hf_headers(),
             json=repo_settings,
-        )
+        timeout=60)
         hf_raise_for_status(r)
     try:
         yield dataset
