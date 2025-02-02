@@ -2,7 +2,6 @@
 # Copyright 2023 The HuggingFace Authors.
 
 import json
-import random
 import re
 from hashlib import sha1
 from pathlib import Path
@@ -14,6 +13,7 @@ from libcommon.storage import init_dir, remove_dir
 
 from worker.config import AppConfig
 from worker.job_runner import JobRunner
+import secrets
 
 
 class JobRunnerWithCache(JobRunner):
@@ -35,7 +35,7 @@ class JobRunnerWithCache(JobRunner):
         self.base_cache_directory = cache_directory
 
     def get_cache_subdirectory(self, digits: int = 14) -> str:
-        random_str = f"{random.randrange(10**(digits - 1), 10**digits)}"  # nosec B311
+        random_str = f"{secrets.SystemRandom().randrange(10**(digits - 1), 10**digits)}"  # nosec B311
         # TODO: Refactor, need a way to generate payload based only on provided params
         payload = (
             random_str,
