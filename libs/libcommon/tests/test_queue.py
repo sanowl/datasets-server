@@ -3,7 +3,6 @@
 
 import json
 import os
-import random
 import time
 from datetime import datetime, timedelta
 from multiprocessing import Pool
@@ -28,6 +27,7 @@ from libcommon.resources import QueueMongoResource
 from libcommon.utils import get_datetime
 
 from .utils import assert_metric
+import secrets
 
 
 def get_old_datetime() -> datetime:
@@ -530,7 +530,7 @@ def test_queue_get_zombies() -> None:
 
 def random_sleep() -> None:
     MAX_SLEEP_MS = 40
-    time.sleep(MAX_SLEEP_MS / 1000 * random.random())
+    time.sleep(MAX_SLEEP_MS / 1000 * secrets.SystemRandom().random())
 
 
 def increment(tmp_file: Path) -> None:
