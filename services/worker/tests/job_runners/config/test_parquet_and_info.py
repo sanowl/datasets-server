@@ -18,7 +18,6 @@ import datasets.info
 import pandas as pd
 import pyarrow.parquet as pq
 import pytest
-import requests
 from datasets import Audio, Features, Image, Value, load_dataset_builder
 from datasets.packaged_modules.generator.generator import (
     Generator as ParametrizedGeneratorBasedBuilder,
@@ -61,6 +60,7 @@ from worker.utils import resolve_trust_remote_code
 from ...constants import CI_HUB_ENDPOINT, CI_USER_TOKEN
 from ...fixtures.hub import HubDatasetTest
 from ..utils import REVISION_NAME
+from security import safe_requests
 
 GetJobRunner = Callable[[str, str, AppConfig], ConfigParquetAndInfoJobRunner]
 
@@ -404,7 +404,7 @@ def test_compute_splits_response_simple_csv_ok(
         # in all these cases, the parquet files are not accessible without a token
         with pytest.raises(Exception):
             pd.read_parquet(result["parquet_files"][0]["url"], engine="auto")
-        r = requests.get(
+        r = safe_requests.get(
             result["parquet_files"][0]["url"], headers={"Authorization": f"Bearer {app_config.common.hf_token}"}
         )
         assert r.status_code == HTTPStatus.OK, r.text
