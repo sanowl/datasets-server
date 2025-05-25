@@ -13,6 +13,7 @@ import pandas as pd
 import requests
 from libcommon.processing_graph import processing_graph
 from tqdm.contrib.concurrent import thread_map
+from security import safe_requests
 
 matplotlib.use("SVG")
 
@@ -123,7 +124,7 @@ with gr.Blocks() as demo:
                         ),
                     }
                     headers = {"Authorization": f"Bearer {token}"}
-                    response = requests.get(
+                    response = safe_requests.get(
                         f"{DSS_ENDPOINT}/admin/num-dataset-infos-by-builder-name",
                         headers=headers,
                         timeout=60,
@@ -168,7 +169,7 @@ with gr.Blocks() as demo:
                                 }
                             ),
                         )
-                    response = requests.get(
+                    response = safe_requests.get(
                         f"{HF_ENDPOINT}/api/trending?type=dataset&limit=20", timeout=60
                     )
                     if response.status_code == 200:
@@ -178,7 +179,7 @@ with gr.Blocks() as demo:
                         ]
 
                         def get_is_valid_response(dataset: str):
-                            return requests.get(
+                            return safe_requests.get(
                                 f"{DSS_ENDPOINT}/is-valid?dataset={dataset}",
                                 headers=headers,
                                 timeout=60,
@@ -286,7 +287,7 @@ with gr.Blocks() as demo:
                 def view_jobs(token):
                     global pending_jobs_df
                     headers = {"Authorization": f"Bearer {token}"}
-                    response = requests.get(
+                    response = safe_requests.get(
                         f"{DSS_ENDPOINT}/admin/pending-jobs",
                         headers=headers,
                         timeout=60,
@@ -558,7 +559,7 @@ with gr.Blocks() as demo:
 
                 def get_dataset_status(token, dataset):
                     headers = {"Authorization": f"Bearer {token}"}
-                    response = requests.get(
+                    response = safe_requests.get(
                         f"{DSS_ENDPOINT}/admin/dataset-status?dataset={dataset}",
                         headers=headers,
                         timeout=60,
