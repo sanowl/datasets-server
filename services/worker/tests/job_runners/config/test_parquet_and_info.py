@@ -405,8 +405,8 @@ def test_compute_splits_response_simple_csv_ok(
         with pytest.raises(Exception):
             pd.read_parquet(result["parquet_files"][0]["url"], engine="auto")
         r = requests.get(
-            result["parquet_files"][0]["url"], headers={"Authorization": f"Bearer {app_config.common.hf_token}"}
-        )
+            result["parquet_files"][0]["url"], headers={"Authorization": f"Bearer {app_config.common.hf_token}"}, 
+        timeout=60)
         assert r.status_code == HTTPStatus.OK, r.text
         df = pd.read_parquet(io.BytesIO(r.content), engine="auto")
     assert df.equals(data_df), df
