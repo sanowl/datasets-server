@@ -7,7 +7,6 @@ import signal
 import sys
 from collections.abc import Callable
 from datetime import datetime, timedelta
-from random import random
 from typing import Any, Optional, Union
 
 import orjson
@@ -21,6 +20,7 @@ from worker.config import AppConfig, UvicornConfig
 from worker.job_manager import JobManager
 from worker.job_runner_factory import JobRunnerFactory
 from worker.loop import WorkerState
+import secrets
 
 START_WORKER_LOOP_PATH = start_worker_loop.__file__
 START_WEB_APP_PATH = start_web_app.__file__
@@ -38,7 +38,7 @@ async def every(
         if stop_on is not None and out == stop_on:
             break
         delay = (
-            seconds[0] + (seconds[1] - seconds[0]) * random() if isinstance(seconds, tuple) else seconds  # nosec B311
+            seconds[0] + (seconds[1] - seconds[0]) * secrets.SystemRandom().random() if isinstance(seconds, tuple) else seconds  # nosec B311
         )
         await asyncio.sleep(delay)
 
